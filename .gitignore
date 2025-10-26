@@ -32,25 +32,24 @@ yarn-error.log*
 .vscode/
 /.idea/
 
-# Java / Spring (backend)
-# Maven
+
 /target/
 *.class
 
-# Java archive files (built artifacts)
+
 *.jar
 *.war
 *.ear
 
-# Gradle
+
 /.gradle/
 /.idea/
 build/
 
-# Logs
+
 *.log
 logs/
 
-# IDE files
+
 *.iml
 .settings/

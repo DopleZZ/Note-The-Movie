@@ -1,4 +1,5 @@
 const BASE = 'https://api.themoviedb.org/3'
+import { getToken } from './auth'
 
 function getApiKey() {
   const key = import.meta.env.VITE_TMDB_API_KEY
@@ -11,7 +12,10 @@ function getApiKey() {
 export async function getPopularMovies(page = 1) {
   const apiKey = getApiKey()
   const url = `${BASE}/movie/popular?api_key=${apiKey}&language=ru-RU&page=${page}`
-  const res = await fetch(url)
+  const headers = {}
+  const token = getToken()
+  if (token) headers['Authorization'] = `Bearer ${token}`
+  const res = await fetch(url, { headers })
   if (!res.ok) {
     const text = await res.text()
     throw new Error(`TMDB error: ${res.status} ${text}`)
@@ -22,7 +26,10 @@ export async function getPopularMovies(page = 1) {
 export async function getMovieDetails(id) {
   const apiKey = getApiKey()
   const url = `${BASE}/movie/${id}?api_key=${apiKey}&language=ru-RU&append_to_response=credits`
-  const res = await fetch(url)
+  const headers = {}
+  const token = getToken()
+  if (token) headers['Authorization'] = `Bearer ${token}`
+  const res = await fetch(url, { headers })
   if (!res.ok) {
     const text = await res.text()
     throw new Error(`TMDB error: ${res.status} ${text}`)

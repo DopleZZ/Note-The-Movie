@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { getPopularMovies } from '../api/tmdb'
+import MovieModal from '../components/MovieModal'
 
 export default function PopularMovies() {
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [selectedId, setSelectedId] = useState(null)
 
   useEffect(() => {
     let mounted = true
@@ -39,7 +41,7 @@ export default function PopularMovies() {
       ) : (
         <div className="grid">
           {movies.map((m) => (
-            <article key={m.id} className="card">
+            <article key={m.id} className="card" onClick={() => setSelectedId(m.id)}>
               {m.poster_path ? (
                 <img
                   src={`https://image.tmdb.org/t/p/w300${m.poster_path}`}
@@ -60,6 +62,10 @@ export default function PopularMovies() {
             </article>
           ))}
         </div>
+      )}
+
+      {selectedId && (
+        <MovieModal movieId={selectedId} onClose={() => setSelectedId(null)} />
       )}
     </section>
   )

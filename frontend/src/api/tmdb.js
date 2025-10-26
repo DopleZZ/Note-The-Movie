@@ -18,3 +18,14 @@ export async function getPopularMovies(page = 1) {
   }
   return res.json()
 }
+
+export async function getMovieDetails(id) {
+  const apiKey = getApiKey()
+  const url = `${BASE}/movie/${id}?api_key=${apiKey}&language=ru-RU&append_to_response=credits`
+  const res = await fetch(url)
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`TMDB error: ${res.status} ${text}`)
+  }
+  return res.json()
+}

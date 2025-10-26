@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import PopularMovies from './pages/PopularMovies'
 import Profile from './pages/Profile'
 import AuthModal from './components/AuthModal'
+import SearchBar from './components/SearchBar'
 import { getCurrentUser, logout } from './api/auth'
 
 export default function App() {
@@ -41,18 +42,21 @@ export default function App() {
           <p>Составляй свои списки фильмов — пока показываем популярные</p>
         </div>
 
-        <div className="header-actions">
-          {user ? (
-            <button className="auth-button" title={user} onClick={() => navigate('/profile')} aria-label="Profile">
-              {/* simple user icon */}
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zM4 20c0-2.761 4.477-5 8-5s8 2.239 8 5v1H4v-1z" fill="currentColor"/></svg>
-            </button>
-          ) : (
-            <>
-              <button className="auth-button" onClick={() => openAuth('login')} aria-label="Login">Войти</button>
-              <button className="auth-button ghost" onClick={() => openAuth('register')} aria-label="Register">Регистрация</button>
-            </>
-          )}
+        <div style={{display:'flex', alignItems:'center', gap:'16px'}}>
+          <SearchBar />
+          <div className="header-actions">
+            {user ? (
+              <button className="auth-button" title={user} onClick={() => navigate('/profile')} aria-label="Profile">
+                {/* simple user icon */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zM4 20c0-2.761 4.477-5 8-5s8 2.239 8 5v1H4v-1z" fill="currentColor"/></svg>
+              </button>
+            ) : (
+              <>
+                <button className="auth-button" onClick={() => openAuth('login')} aria-label="Login">Войти</button>
+                <button className="auth-button ghost" onClick={() => openAuth('register')} aria-label="Register">Регистрация</button>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
@@ -62,8 +66,6 @@ export default function App() {
           <Route path="/profile" element={<Profile user={user} onLogout={handleLogout} />} />
         </Routes>
       </main>
-
-      <footer className="footer">Data provided by TMDB</footer>
 
       {authOpen && (
         <AuthModal mode={authMode} onClose={() => setAuthOpen(false)} onSuccess={handleAuthSuccess} />

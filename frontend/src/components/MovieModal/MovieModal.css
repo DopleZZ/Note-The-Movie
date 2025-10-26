@@ -1,4 +1,4 @@
-.modal-overlay{position:fixed;inset:0;background:rgba(3,6,10,0.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:60}
+.modal-overlay{position:fixed;inset:0;background:rgba(3,6,10,0.8);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:60}
 .modal{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);border-radius:10px;max-width:980px;width:100%;max-height:90vh;overflow:auto;position:relative}
 .modal-close{position:absolute;right:8px;top:8px;background:transparent;border:0;color:var(--muted);font-size:20px;cursor:pointer}
 .modal-body{display:flex;gap:16px;padding:18px}

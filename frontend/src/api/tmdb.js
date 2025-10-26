@@ -36,3 +36,17 @@ export async function getMovieDetails(id) {
   }
   return res.json()
 }
+
+export async function searchMovies(query, page = 1) {
+  const apiKey = getApiKey()
+  const url = `${BASE}/search/movie?api_key=${apiKey}&language=ru-RU&query=${encodeURIComponent(query)}&page=${page}`
+  const headers = {}
+  const token = getToken()
+  if (token) headers['Authorization'] = `Bearer ${token}`
+  const res = await fetch(url, { headers })
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`TMDB error: ${res.status} ${text}`)
+  }
+  return res.json()
+}

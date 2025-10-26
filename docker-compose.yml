@@ -1,0 +1,14 @@
+services:
+  app:
+    image: note-the-movie:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      NOTETHEMOVIE_JWT_SECRET: ${NOTETHEMOVIE_JWT_SECRET:-}
+      NOTETHEMOVIE_CORS_ALLOWED_ORIGINS: ${NOTETHEMOVIE_CORS_ALLOWED_ORIGINS:-http://localhost:8080}
+      
+      JAVA_OPTS: "-Xms128m -Xmx512m"
+    restart: unless-stopped

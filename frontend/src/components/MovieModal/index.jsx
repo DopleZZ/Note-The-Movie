@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { getMovieDetails } from '../../api/tmdb'
+import { addToWatched, removeFromWatched, addToFavorites, removeFromFavorites, getWatched, getFavorites } from '../../api/movies'
 import './MovieModal.css'
 
 export default function MovieModal({ movieId, onClose }) {
   const [details, setDetails] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isWatched, setIsWatched] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [actionLoading, setActionLoading] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('ntm_token'))
 
   useEffect(() => {
     let mounted = true
@@ -15,6 +20,7 @@ export default function MovieModal({ movieId, onClose }) {
         if (!mounted) return
         setDetails(data)
         setError(null)
+        checkLists(data)
       })
       .catch((err) => {
         if (!mounted) return
@@ -35,6 +41,53 @@ export default function MovieModal({ movieId, onClose }) {
       document.removeEventListener('keydown', onKey)
     }
   }, [movieId, onClose])
+
+  async function checkLists(movie) {
+    if (!isLoggedIn) return
+    try {
+      const [watched, favorites] = await Promise.all([getWatched(), getFavorites()])
+      setIsWatched(watched.some(m => m.id === movie.id))
+      setIsFavorite(favorites.some(m => m.id === movie.id))
+    } catch (err) {
+      // Ignore errors, user might not be logged in
+    }
+  }
+
+  async function handleWatched() {
+    if (!details) return
+    setActionLoading(true)
+    try {
+      if (isWatched) {
+        await removeFromWatched(details.id)
+        setIsWatched(false)
+      } else {
+        await addToWatched(details)
+        setIsWatched(true)
+      }
+    } catch (err) {
+      alert('Ошибка: ' + err.message)
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  async function handleFavorite() {
+    if (!details) return
+    setActionLoading(true)
+    try {
+      if (isFavorite) {
+        await removeFromFavorites(details.id)
+        setIsFavorite(false)
+      } else {
+        await addToFavorites(details)
+        setIsFavorite(true)
+      }
+    } catch (err) {
+      alert('Ошибка: ' + err.message)
+    } finally {
+      setActionLoading(false)
+    }
+  }
 
   function onOverlayClick(e) {
     if (e.target === e.currentTarget) onClose()
@@ -81,6 +134,18 @@ export default function MovieModal({ movieId, onClose }) {
               )}
 
               <div className="actions">
+                {isLoggedIn ? (
+                  <>
+                    <button className={`btn ${isWatched ? 'secondary' : ''}`} onClick={handleWatched} disabled={actionLoading}>
+                      {isWatched ? 'Убрать из просмотренных' : 'Отметить просмотренным'}
+                    </button>
+                    <button className={`btn ${isFavorite ? 'secondary' : ''}`} onClick={handleFavorite} disabled={actionLoading}>
+                      {isFavorite ? 'Убрать из избранных' : 'Добавить в избранное'}
+                    </button>
+                  </>
+                ) : (
+                  <p style={{color: 'var(--muted)', fontSize: '14px'}}>Войдите в аккаунт, чтобы добавлять фильмы в списки</p>
+                )}
                 {details.homepage && (
                   <a className="btn" href={details.homepage} target="_blank" rel="noreferrer">Официальный сайт</a>
                 )}

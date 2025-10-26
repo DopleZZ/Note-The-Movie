@@ -9,6 +9,25 @@ services:
     environment:
       NOTETHEMOVIE_JWT_SECRET: ${NOTETHEMOVIE_JWT_SECRET:-}
       NOTETHEMOVIE_CORS_ALLOWED_ORIGINS: ${NOTETHEMOVIE_CORS_ALLOWED_ORIGINS:-http://localhost:8080}
-      
+      DB_URL: jdbc:postgresql://postgres:5432/notethemovie
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
       JAVA_OPTS: "-Xms128m -Xmx512m"
+    depends_on:
+      - postgres
     restart: unless-stopped
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: notethemovie
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

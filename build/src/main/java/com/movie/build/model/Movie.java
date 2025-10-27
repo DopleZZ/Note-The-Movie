@@ -38,7 +38,6 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
-    // Getters and Setters
 
     public Long getId() {
         return id;

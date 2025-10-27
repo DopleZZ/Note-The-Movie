@@ -32,20 +32,13 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                // allow unauthenticated access to static frontend assets and root
-                // Note: avoid complex double-wildcard patterns (like /**/*.js) which can cause PathPattern parsing errors.
-                // Vite outputs index.html at root and hashed assets under /assets/, so permit those paths explicitly.
-                // Temporarily allow all GET requests so static assets and index can be served while debugging.
-                // For production tighten this to explicit static paths like "/assets/**" and "/index.html".
                 .requestMatchers(HttpMethod.GET, "/**").permitAll()
-                // auth endpoints and h2 console
                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // for H2 console frames
         http.headers().frameOptions().sameOrigin();
 
         return http.build();
@@ -73,3 +66,8 @@ public class SecurityConfig {
         return source;
     }
 }
+
+
+
+
+

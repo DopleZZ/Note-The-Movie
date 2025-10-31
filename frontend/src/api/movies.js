@@ -7,8 +7,8 @@ function getAuthHeaders() {
 
 function handleAuthError(response) {
   if (response.status === 401 || response.status === 403) {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
+    localStorage.removeItem('ntm_token')
+    localStorage.removeItem('ntm_user')
     window.location.reload()
   }
   return response

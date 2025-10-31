@@ -1,4 +1,4 @@
-const BASE = ''
+const BASE = import.meta.env.VITE_API_BASE || ''
 
 function getAuthHeaders() {
   const token = localStorage.getItem('ntm_token')

@@ -10,11 +10,9 @@ services:
       - 8.8.8.8
       - 1.1.1.1
     environment:
-      # Database connection for JPA (required)
       DB_URL: "jdbc:postgresql://postgres:5432/notethemovie"
       DB_USERNAME: "postgres"
       DB_PASSWORD: "password"
-      # TMDB / JWT values (can be set via .env)
       TMDB_API_KEY: ${TMDB_API_KEY}
       VITE_TMDB_API_KEY: ${VITE_TMDB_API_KEY}
       NOTETHEMOVIE_JWT_SECRET: ${NOTETHEMOVIE_JWT_SECRET}

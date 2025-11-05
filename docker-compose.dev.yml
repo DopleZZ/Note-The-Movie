@@ -1,0 +1,52 @@
+ 
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: notethemovie
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    image: eclipse-temurin:17-jdk
+    working_dir: /src/backend
+    command: sh -c "./gradlew bootRun --no-daemon"
+    # Load variables from .env and pass through without interpolation to avoid warnings
+    env_file:
+      - .env
+    environment:
+      - TMDB_API_KEY
+      - VITE_TMDB_API_KEY
+      - NOTETHEMOVIE_JWT_SECRET
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/src/backend
+      - ${HOME}/.gradle:/root/.gradle
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  frontend:
+    image: node:18
+    working_dir: /src/frontend
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0 --port 5173"
+    environment:
+      VITE_API_BASE: http://localhost:8080
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/src/frontend
+      - /src/frontend/node_modules
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

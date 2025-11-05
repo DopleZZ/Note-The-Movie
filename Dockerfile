@@ -23,20 +23,20 @@ RUN apt-get update && apt-get install -y wget unzip && \
     rm gradle-8.4-bin.zip
 
 
-COPY build/ ./build
+COPY backend/ ./backend
 
 
-COPY --from=node_builder /src/frontend/dist ./build/src/main/resources/static
+COPY --from=node_builder /src/frontend/dist ./backend/src/main/resources/static
 
 
-RUN gradle -p build bootJar --no-daemon
+RUN gradle -p backend bootJar --no-daemon
 
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 
-COPY --from=gradle_builder /src/build/build/libs/*.jar ./app.jar
+COPY --from=gradle_builder /src/backend/build/libs/*.jar ./app.jar
 
 EXPOSE 8080
 

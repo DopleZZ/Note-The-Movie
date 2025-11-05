@@ -49,7 +49,6 @@ export default function MovieModal({ movieId, onClose }) {
       setIsWatched(watched.some(m => m.id === movie.id))
       setIsFavorite(favorites.some(m => m.id === movie.id))
     } catch (err) {
-      // Ignore errors, user might not be logged in
     }
   }
 

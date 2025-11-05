@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8080'
+const API_BASE = import.meta.env.VITE_API_BASE || ''
 
 function getAuthHeaders() {
   const token = localStorage.getItem('ntm_token')
@@ -6,9 +6,11 @@ function getAuthHeaders() {
 }
 
 function handleAuthError(response) {
-  if (response.status === 401 || response.status === 403) {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
+  // Only clear auth on explicit unauthorized (401). For 403 (forbidden) keep session and let UI show the error.
+  if (response.status === 401) {
+    localStorage.removeItem('ntm_token')
+    localStorage.removeItem('ntm_user')
+    // reload to reset app state and show login
     window.location.reload()
   }
   return response

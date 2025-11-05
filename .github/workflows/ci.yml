@@ -42,7 +42,14 @@ jobs:
       - name: Install dependencies
         working-directory: ./frontend
         run: |
-          npm ci
+          # Use `npm ci` when a lockfile is present for reproducible installs,
+          # otherwise fall back to `npm install` so CI doesn't fail when lockfile
+          # isn't committed (this repo currently doesn't have frontend/package-lock.json).
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
       - name: Run frontend tests
         working-directory: ./frontend
         run: |

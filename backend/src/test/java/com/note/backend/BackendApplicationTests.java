@@ -26,10 +26,8 @@ class BackendApplicationTests {
 		registry.add("spring.datasource.username", postgres::getUsername);
 		registry.add("spring.datasource.password", postgres::getPassword);
 		registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
-		// Provide minimal secrets for tests
-	// 32-byte base64 to satisfy io.jsonwebtoken key length requirements
-	registry.add("app.jwt.secret", () -> "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=");
-	registry.add("app.tmdb.api-key", () -> "dummy");
+		registry.add("app.jwt.secret", () -> "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=");
+		registry.add("app.tmdb.api-key", () -> "dummy");
 	}
 
 	@Test

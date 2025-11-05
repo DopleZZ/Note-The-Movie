@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +56,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/watched/{movieId}")
+    @Transactional
     public ResponseEntity<String> removeWatched(@PathVariable Long movieId) {
         User user = currentUser();
         watchedRepo.deleteByUserAndMovieId(user, movieId);
@@ -86,6 +88,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/favorites/{movieId}")
+    @Transactional
     public ResponseEntity<String> removeFavorite(@PathVariable Long movieId) {
         User user = currentUser();
         favoriteRepo.deleteByUserAndMovieId(user, movieId);

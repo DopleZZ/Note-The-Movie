@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
   app:
@@ -21,9 +21,9 @@ services:
       VITE_TMDB_API_KEY: ${VITE_TMDB_API_KEY}
       NOTETHEMOVIE_JWT_SECRET: ${NOTETHEMOVIE_JWT_SECRET}
       JAVA_OPTS: "-Xms256m -Xmx512m"
+    # simple depends_on for better compatibility with older docker-compose
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
     restart: unless-stopped
 
   postgres:
@@ -49,5 +49,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data:
-    name: notethemovie_postgres_data
+  postgres_data: {}

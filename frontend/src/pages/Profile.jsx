@@ -46,15 +46,15 @@ export default function Profile({ user, onLogout }) {
               <div className="carousel">
                 {watched.map(movie => (
                   <article key={movie.id} className="card" onClick={() => setSelectedId(movie.id)}>
-                    {movie.posterPath ? (
-                      <img src={`https://image.tmdb.org/t/p/w300${movie.posterPath}`} alt={movie.title} className="poster" />
+                    {(movie.posterPath || movie.posterUrl) && (movie.posterPath || movie.posterUrl).startsWith('http') ? (
+                      <img src={(movie.posterPath || movie.posterUrl)} alt={movie.title || movie.nameRu || movie.nameOriginal} className="poster" />
                     ) : (
                       <div className="no-poster">Нет постера</div>
                     )}
                     <div className="meta">
-                      <h3 className="title">{movie.title}</h3>
+                      <h3 className="title">{movie.title || movie.nameRu || movie.nameOriginal}</h3>
                       <div className="sub">
-                        <span>{movie.releaseDate}</span>
+                        <span>{movie.releaseDate || movie.year || ''}</span>
                       </div>
                     </div>
                   </article>
@@ -71,15 +71,15 @@ export default function Profile({ user, onLogout }) {
               <div className="carousel">
                 {favorites.map(movie => (
                   <article key={movie.id} className="card" onClick={() => setSelectedId(movie.id)}>
-                    {movie.posterPath ? (
-                      <img src={`https://image.tmdb.org/t/p/w300${movie.posterPath}`} alt={movie.title} className="poster" />
+                    {(movie.posterPath || movie.posterUrl) && (movie.posterPath || movie.posterUrl).startsWith('http') ? (
+                      <img src={(movie.posterPath || movie.posterUrl)} alt={movie.title || movie.nameRu || movie.nameOriginal} className="poster" />
                     ) : (
                       <div className="no-poster">Нет постера</div>
                     )}
                     <div className="meta">
-                      <h3 className="title">{movie.title}</h3>
+                      <h3 className="title">{movie.title || movie.nameRu || movie.nameOriginal}</h3>
                       <div className="sub">
-                        <span>{movie.releaseDate}</span>
+                        <span>{movie.releaseDate || movie.year || ''}</span>
                       </div>
                     </div>
                   </article>

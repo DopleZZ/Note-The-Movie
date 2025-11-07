@@ -34,9 +34,9 @@ public class IntegrationTests {
                 registry.add("spring.datasource.username", postgres::getUsername);
                 registry.add("spring.datasource.password", postgres::getPassword);
                 registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
-                // provide JWT secret (base64 32 bytes) and dummy TMDB key for tests
+                // provide JWT secret (base64 32 bytes) and dummy provider key for tests
                 registry.add("app.jwt.secret", () -> "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=");
-                registry.add("app.tmdb.api-key", () -> "dummy");
+                registry.add("app.kinopoisk.api-key", () -> "dummy");
         }
 
     @Autowired

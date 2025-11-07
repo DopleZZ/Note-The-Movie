@@ -1,3 +1,4 @@
+version: "3.8"
 services:
   app:
     image: note-the-movie:latest
@@ -13,8 +14,8 @@ services:
       DB_URL: "jdbc:postgresql://postgres:5432/notethemovie"
       DB_USERNAME: "postgres"
       DB_PASSWORD: "password"
-      TMDB_API_KEY: ${TMDB_API_KEY}
-      VITE_TMDB_API_KEY: ${VITE_TMDB_API_KEY}
+      KINOPOISK_API_KEY: ${KINOPOISK_API_KEY}
+      VITE_KINOPOISK_API_KEY: ${VITE_KINOPOISK_API_KEY}
       NOTETHEMOVIE_JWT_SECRET: ${NOTETHEMOVIE_JWT_SECRET}
       JAVA_OPTS: "-Xms128m -Xmx512m"
     depends_on:

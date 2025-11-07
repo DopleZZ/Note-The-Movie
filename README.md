@@ -2,14 +2,14 @@
 
 ## Overview
 
-Note-The-Movie is a full-stack web application for browsing and managing movie lists. Users can view popular movies from TMDB, mark movies as watched or add them to favorites, and view their personal lists in the profile.
+Note-The-Movie is a full-stack web application for browsing and managing movie lists. Users can view popular movies (via the Kinopoisk unofficial API), mark movies as watched or add them to favorites, and view their personal lists in the profile.
 
 ## Technology Stack
 
 - **Frontend**: React, Vite, React Router
 - **Backend**: Spring Boot, Spring Security, Spring Data JPA, JWT authentication
 - **Database**: PostgreSQL
-- **API**: TMDB API for movie data
+- **API**: Kinopoisk Unofficial API for movie data
 - **Containerization**: Docker, Docker Compose
 
 ## Features

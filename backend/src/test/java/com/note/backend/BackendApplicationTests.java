@@ -26,8 +26,8 @@ class BackendApplicationTests {
 		registry.add("spring.datasource.username", postgres::getUsername);
 		registry.add("spring.datasource.password", postgres::getPassword);
 		registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
-		registry.add("app.jwt.secret", () -> "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=");
-		registry.add("app.tmdb.api-key", () -> "dummy");
+	registry.add("app.jwt.secret", () -> "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=");
+	registry.add("app.kinopoisk.api-key", () -> "dummy");
 	}
 
 	@Test

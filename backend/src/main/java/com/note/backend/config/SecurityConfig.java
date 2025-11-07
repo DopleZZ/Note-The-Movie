@@ -34,8 +34,8 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain publicApiChain(HttpSecurity http) throws Exception {
-        http
-                .securityMatcher("/api/auth/**", "/api/tmdb/**")
+    http
+        .securityMatcher("/api/auth/**", "/api/kinopoisk/**")
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());

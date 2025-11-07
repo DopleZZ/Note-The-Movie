@@ -6,11 +6,9 @@ function getAuthHeaders() {
 }
 
 function handleAuthError(response) {
-  // Only clear auth on explicit unauthorized (401). For 403 (forbidden) keep session and let UI show the error.
   if (response.status === 401) {
     localStorage.removeItem('ntm_token')
     localStorage.removeItem('ntm_user')
-    // reload to reset app state and show login
     window.location.reload()
   }
   return response

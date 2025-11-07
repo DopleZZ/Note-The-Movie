@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { searchMovies } from '../../api/tmdb'
+import { searchMovies } from '../../api/kinopoisk'
 import { useNavigate } from 'react-router-dom'
 
 export default function SearchBar() {
@@ -102,18 +102,18 @@ export default function SearchBar() {
               onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
               onMouseLeave={(e) => e.target.style.background = 'transparent'}
             >
-              {movie.poster_path ? (
+              {(movie.poster_path || movie.posterUrl) && (movie.poster_path || movie.posterUrl).startsWith('http') ? (
                 <img
-                  src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
-                  alt={movie.title}
+                  src={(movie.poster_path || movie.posterUrl)}
+                  alt={movie.title || movie.nameRu}
                   style={{width: '40px', height: '60px', objectFit: 'cover', borderRadius: '4px', marginRight: '8px'}}
                 />
               ) : (
                 <div style={{width: '40px', height: '60px', background: '#07101a', borderRadius: '4px', marginRight: '8px'}}></div>
               )}
               <div>
-                <div style={{fontSize: '14px', fontWeight: 'bold'}}>{movie.title}</div>
-                <div style={{fontSize: '12px', color: 'var(--muted)'}}>{movie.release_date ? movie.release_date.slice(0,4) : ''} • ★ {movie.vote_average}</div>
+                <div style={{fontSize: '14px', fontWeight: 'bold'}}>{movie.title || movie.nameRu || movie.nameOriginal}</div>
+                <div style={{fontSize: '12px', color: 'var(--muted)'}}>{movie.release_date ? movie.release_date.slice(0,4) : (movie.year || '')} • ★ {movie.vote_average || ''}</div>
               </div>
             </div>
           ))}

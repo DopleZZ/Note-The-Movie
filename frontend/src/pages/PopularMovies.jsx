@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getPopularMovies } from '../api/tmdb'
+import { getPopularMovies } from '../api/kinopoisk'
 import MovieModal from '../components/MovieModal'
 
 export default function PopularMovies() {
@@ -42,10 +42,10 @@ export default function PopularMovies() {
         <div className="grid">
           {movies.map((m) => (
             <article key={m.id} className="card" onClick={() => setSelectedId(m.id)}>
-              {m.poster_path ? (
+              {(m.poster_path || m.posterUrl) && (m.poster_path || m.posterUrl).startsWith('http') ? (
                 <img
-                  src={`https://image.tmdb.org/t/p/w300${m.poster_path}`}
-                  alt={m.title}
+                  src={(m.poster_path || m.posterUrl)}
+                  alt={m.title || m.nameRu || m.nameOriginal}
                   className="poster"
                 />
               ) : (
@@ -53,10 +53,10 @@ export default function PopularMovies() {
               )}
 
               <div className="meta">
-                <h3 className="title">{m.title}</h3>
+                <h3 className="title">{m.title || m.nameRu || m.nameOriginal}</h3>
                 <div className="sub">
-                  <span>{m.release_date}</span>
-                  <span>★ {m.vote_average}</span>
+                  <span>{m.release_date ? (m.release_date || '').toString().slice(0,4) : (m.year || '')}</span>
+                  <span>★ {m.vote_average || (m.rating && m.rating.kp) || ''}</span>
                 </div>
               </div>
             </article>

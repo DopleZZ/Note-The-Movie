@@ -17,12 +17,11 @@ services:
     image: eclipse-temurin:17-jdk
     working_dir: /src/backend
     command: sh -c "./gradlew bootRun --no-daemon"
-    # Load variables from .env and pass through without interpolation to avoid warnings
     env_file:
       - .env
     environment:
-      - TMDB_API_KEY
-      - VITE_TMDB_API_KEY
+      - KINOPOISK_API_KEY
+      - VITE_KINOPOISK_API_KEY
       - NOTETHEMOVIE_JWT_SECRET
     ports:
       - "8080:8080"

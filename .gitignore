@@ -38,3 +38,6 @@ build/jacoco/
 logs/
 *.iml
 .settings/
+
+# local helper scripts
+scripts/run-tests.sh

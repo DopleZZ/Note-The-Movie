@@ -28,6 +28,7 @@ class BackendApplicationTests {
 		registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
 	registry.add("app.jwt.secret", () -> "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=");
 	registry.add("app.kinopoisk.api-key", () -> "dummy");
+	registry.add("app.cors.allowed-origins", () -> "*");
 	}
 
 	@Test

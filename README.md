@@ -11,6 +11,9 @@ Note-The-Movie is a full-stack web application for browsing and managing movie l
 - **Database**: PostgreSQL
 - **API**: Kinopoisk Unofficial API for movie data
 - **Containerization**: Docker, Docker Compose
+- **Build/Tooling**: Java 17, Gradle, Node.js, npm
+- **Testing**: JUnit 5, Spring Boot Test, Testcontainers (PostgreSQL), MockMvc
+- **CI**: GitHub Actions
 
 ## Features
 

@@ -11,11 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-/**
- * Service that calls the Kinopoisk Unofficial API.
- * Exposes the same helper methods previously provided by the old TmdbService
- * but is named to reflect the actual provider.
- */
 @Service
 public class KinopoiskService {
     private final String apiKey;
@@ -30,11 +25,12 @@ public class KinopoiskService {
     }
 
     public ResponseEntity<String> getPopular(int page) {
-        URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/v2.2/films/top")
-                .queryParam("type", "TOP_100_POPULAR_FILMS")
-                .queryParam("page", page)
-                .build(true)
-                .toUri();
+    URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/v2.2/films/top")
+        .queryParam("type", "TOP_100_POPULAR_FILMS")
+        .queryParam("page", page)
+        .encode()
+        .build()
+        .toUri();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-API-KEY", apiKey);
@@ -44,7 +40,6 @@ public class KinopoiskService {
         if (resp.getStatusCode().is2xxSuccessful() && resp.getBody() != null) {
             try {
                 JsonNode root = mapper.readTree(resp.getBody());
-                // Kinopoisk returns { pagesCount, films: [...] }
                 ObjectNode out = mapper.createObjectNode();
                 out.put("page", page);
                 if (root.has("pagesCount")) out.put("total_pages", root.get("pagesCount").asInt());
@@ -52,7 +47,6 @@ public class KinopoiskService {
                 else out.putArray("results");
                 return new ResponseEntity<>(mapper.writeValueAsString(out), resp.getStatusCode());
             } catch (Exception ex) {
-                // fall back to raw body if mapping fails
                 return new ResponseEntity<>(resp.getBody(), resp.getStatusCode());
             }
         }
@@ -60,9 +54,10 @@ public class KinopoiskService {
     }
 
     public ResponseEntity<String> getMovieDetails(long id) {
-        URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/v2.2/films/" + id)
-                .build(true)
-                .toUri();
+    URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/v2.2/films/" + id)
+        .encode()
+        .build()
+        .toUri();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-API-KEY", apiKey);
@@ -85,11 +80,12 @@ public class KinopoiskService {
     }
 
     public ResponseEntity<String> search(String query, int page) {
-        URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/v2.1/films/search-by-keyword")
-                .queryParam("keyword", query)
-                .queryParam("page", page)
-                .build(true)
-                .toUri();
+    URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl + "/api/v2.1/films/search-by-keyword")
+        .queryParam("keyword", query)
+        .queryParam("page", page)
+        .encode()
+        .build()
+        .toUri();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-API-KEY", apiKey);

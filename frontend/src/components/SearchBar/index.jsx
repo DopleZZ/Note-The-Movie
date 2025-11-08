@@ -91,7 +91,14 @@ export default function SearchBar() {
           {results.map(movie => (
             <div
               key={movie.id}
-              onClick={() => handleSelect(movie)}
+              onMouseDown={(e) => {
+                // run selection on mousedown to avoid the document 'mousedown' outside
+                // handler closing the dropdown before the click fires. Stop propagation
+                // so the global handler doesn't hide the dropdown prematurely.
+                e.preventDefault()
+                e.stopPropagation()
+                handleSelect(movie)
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',

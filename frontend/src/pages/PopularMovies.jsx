@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { getPopularMovies } from '../api/kinopoisk'
 import MovieModal from '../components/MovieModal'
 
@@ -7,6 +8,8 @@ export default function PopularMovies() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     let mounted = true
@@ -30,6 +33,19 @@ export default function PopularMovies() {
       mounted = false
     }
   }, [])
+
+  // Open modal when navigation state includes selectedMovieId (from SearchBar)
+  useEffect(() => {
+    if (location && location.state && location.state.selectedMovieId) {
+      setSelectedId(location.state.selectedMovieId)
+      // clear navigation state so modal doesn't reopen on refresh/back
+      try {
+        navigate(location.pathname, { replace: true, state: null })
+      } catch (e) {
+        // ignore navigation errors
+      }
+    }
+  }, [location, navigate])
 
   if (loading) return <div className="status">Загрузка популярных фильмов...</div>
   if (error) return <div className="status error">Ошибка: {error}</div>

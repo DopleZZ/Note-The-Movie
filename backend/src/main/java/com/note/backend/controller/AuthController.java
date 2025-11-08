@@ -3,6 +3,8 @@ package com.note.backend.controller;
 import com.note.backend.dto.AuthRequest;
 import com.note.backend.dto.AuthResponse;
 import com.note.backend.model.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import com.note.backend.service.JwtService;
 import com.note.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -47,6 +49,23 @@ public class AuthController {
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверный логин или пароль");
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String username = auth.getName();
+        User user = userService.findByUsernameOrThrow(username);
+        return ResponseEntity.ok(new MeResponse(user.getId(), user.getUsername()));
+    }
+
+    public static class MeResponse {
+        public Long id;
+        public String username;
+        public MeResponse(Long id, String username) { this.id = id; this.username = username; }
     }
 }
 

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, Link } from 'react-router-dom'
 import PopularMovies from './pages/PopularMovies'
 import Profile from './pages/Profile'
+import PublicProfile from './pages/PublicProfile'
 import AuthModal from './components/AuthModal'
 import SearchBar from './components/SearchBar'
-import { getCurrentUser, logout } from './api/auth'
+import { getCurrentUser, getCurrentUserInfo, logout } from './api/auth'
 
 export default function App() {
   const [user, setUser] = useState(null)
@@ -13,7 +14,12 @@ export default function App() {
 
   useEffect(() => {
     const u = getCurrentUser()
-    if (u) setUser(u)
+    if (u) {
+      getCurrentUserInfo().then((info) => {
+        if (info) setUser(info)
+        else setUser({ username: u })
+      })
+    }
   }, [])
 
   const navigate = useNavigate()
@@ -29,24 +35,30 @@ export default function App() {
     navigate('/')
   }
 
-  function handleAuthSuccess() {
-    const u = getCurrentUser()
-    setUser(u)
+  async function handleAuthSuccess() {
+    const info = await getCurrentUserInfo()
+    if (info) setUser(info)
+    else {
+      const u = getCurrentUser()
+      setUser(u ? { username: u } : null)
+    }
   }
 
   return (
     <div className="app">
       <header className="header" style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
         <div>
-          <h1>Note The Movie</h1>
-          <p>Составляй свои списки фильмов — пока показываем популярные</p>
+          <h1 style={{margin:0,fontSize:'1.8rem'}}>
+            <Link to="/" style={{color:'inherit', textDecoration:'none'}} aria-label="Перейти на главную страницу">Note The Movie</Link>
+          </h1>
+          <p style={{marginTop:4}}>Составляй свои списки фильмов — пока показываем популярные</p>
         </div>
 
         <div style={{display:'flex', alignItems:'center', gap:'16px'}}>
           <SearchBar />
           <div className="header-actions">
             {user ? (
-              <button className="auth-button" title={user} onClick={() => navigate('/profile')} aria-label="Profile">
+              <button className="auth-button" title={user.username || user} onClick={() => navigate('/profile')} aria-label="Profile">
                 {/* simple user icon */}
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zM4 20c0-2.761 4.477-5 8-5s8 2.239 8 5v1H4v-1z" fill="currentColor"/></svg>
               </button>
@@ -64,6 +76,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<PopularMovies />} />
           <Route path="/profile" element={<Profile user={user} onLogout={handleLogout} />} />
+          <Route path="/profile/:id" element={<PublicProfile />} />
         </Routes>
       </main>
 

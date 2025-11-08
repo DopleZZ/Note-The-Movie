@@ -35,7 +35,7 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain publicApiChain(HttpSecurity http) throws Exception {
     http
-        .securityMatcher("/api/auth/**", "/api/kinopoisk/**")
+        .securityMatcher("/api/auth/login", "/api/auth/register", "/api/kinopoisk/**", "/api/users/**")
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
@@ -49,8 +49,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/assets/**").permitAll()
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/", "/index.html", "/assets/**", "/profile", "/profile/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 )

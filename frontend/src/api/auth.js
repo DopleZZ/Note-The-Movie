@@ -13,6 +13,16 @@ export function getCurrentUser() {
   return localStorage.getItem('ntm_user')
 }
 
+export async function getCurrentUserInfo() {
+  const token = getToken()
+  if (!token) return null
+  const res = await fetch(`${BASE}/api/auth/me`, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  if (!res.ok) return null
+  return res.json() // { id, username }
+}
+
 export function logout() {
   localStorage.removeItem('ntm_token')
   localStorage.removeItem('ntm_user')
